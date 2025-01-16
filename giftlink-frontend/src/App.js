@@ -1,14 +1,14 @@
-/*jshint esversion: 8 */
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import './components/MainPage/MainPage';
-import './components/LoginPage/LoginPage';
-import './components/RegisterPage/RegisterPage';
-import './components/DetailsPage/DetailsPage';
-import './components/SearchPage/SearchPage';
+
+const MainPage = React.lazy(() => import('./components/MainPage/MainPage'));
+const LoginPage = React.lazy(() => import('./components/LoginPage/LoginPage'));
+const RegisterPage = React.lazy(() => import('./components/RegisterPage/RegisterPage'));
+const DetailsPage = React.lazy(() => import('./components/DetailsPage/DetailsPage'));
+const SearchPage = React.lazy(() => import('./components/SearchPage/SearchPage'));
 
 function App() {
 
