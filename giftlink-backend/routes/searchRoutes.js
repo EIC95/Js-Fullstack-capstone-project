@@ -1,39 +1,46 @@
+/*jshint esversion: 8 */
 const express = require('express');
 const router = express.Router();
 const connectToDatabase = require('../models/db');
 
-// Search for gifts
-router.get('/', async (req, res, next) => {
+// GET /api/ - Search for gifts based on filters
+router.get('/', async (req, res) => {
     try {
-        const db = connectToDatabase()
+        // Task 1: Connect to MongoDB
+        const db = await connectToDatabase();
+        const collection = db.collection('gifts');
 
-        const collection = db.collection("gifts");
+        // Build the query object
+        const query = {};
 
-        // Initialize the query object
-        let query = {};
+        // Task 2: Check if the name exists and is not empty
+        const { name, category, condition, age_years } = req.query;
 
-        // Add the name filter to the query if the name parameter is not empty
-        if (req.query.name>req.query.name && req.query.name.trim() !== '') {
-            query.name = { $regex: req.query.name, $options: "i" }; // Using regex for partial match, case-insensitive
+        if (name && name.trim() !== '') {
+            query.name = { $regex: name, $options: 'i' }; // Case-insensitive search using regex
         }
 
-        // Task 3: Add other filters to the query
-        if (req.query.category) {
-            query.category = req.query.category;
-            
-        }
-        if (req.query.condition) {
-            query.condition = req.query.condition; 
-        }
-        if (req.query.age_years) {
-            query.age_years = { $lte: parseInt(req.query.age_years) };
+        // Task 3: Add the other three filters to the query
+        if (category && category.trim() !== '') {
+            query.category = category;
         }
 
-        await collection.find(query).toArray()
+        if (condition && condition.trim() !== '') {
+            query.condition = condition;
+        }
 
-        res.json(gifts);
-    } catch (e) {
-        next(e);
+        if (age_years && !isNaN(parseFloat(age_years))) {
+            query.age_years = parseFloat(age_years);
+        }
+
+        // Task 4: Fetch filtered gifts
+        const filteredGifts = await collection.find(query).toArray();
+
+        // Return the filtered gifts
+        res.json(filteredGifts);
+    } catch (error) {
+        console.error('Error searching gifts:', error);
+        res.status(500).json({ error: 'An error occurred while searching for gifts' });
     }
 });
 
