@@ -7,6 +7,10 @@ router.get('/', async (req, res) => {
     try {
         // Task 1: Connect to MongoDB and store connection to db constant
         const db = await connectToDatabase();
+        if (!db) {
+            console.error('Failed to connect to the database');
+            return res.status(500).json({ error: 'Database connection failed' });
+        }
 
         // Task 2: Use the collection() method to retrieve the gift collection
         const collection = db.collection('gifts');
