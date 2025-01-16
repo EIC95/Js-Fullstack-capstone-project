@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 
         const collection = db.collection('gifts');
         console.log('Fetching gifts...');
-        const gifts = await collection.find({}).toArray();
+        const gifts = await collection.find().toArray();
 
         console.log('Gifts fetched:', gifts);
         res.json(gifts);
