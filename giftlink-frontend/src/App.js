@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
