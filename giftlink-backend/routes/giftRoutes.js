@@ -5,26 +5,22 @@ const { ObjectId } = require('mongodb'); // Import ObjectId
 // GET /api/ - Retrieve all gifts
 router.get('/', async (req, res) => {
     try {
-        // Task 1: Connect to MongoDB and store connection to db constant
+        console.log('Connecting to the database...');
         const db = await connectToDatabase();
-        if (!db) {
-            console.error('Failed to connect to the database');
-            return res.status(500).json({ error: 'Database connection failed' });
-        }
+        console.log('Connected to the database.');
 
-        // Task 2: Use the collection() method to retrieve the gift collection
         const collection = db.collection('gifts');
-
-        // Task 3: Fetch all gifts using collection.find().toArray()
+        console.log('Fetching gifts...');
         const gifts = await collection.find({}).toArray();
 
-        // Task 4: Return the gifts using res.json()
+        console.log('Gifts fetched:', gifts);
         res.json(gifts);
     } catch (error) {
-        console.error('Error fetching gifts:', error);
+        console.error('Error:', error);
         res.status(500).json({ error: 'An error occurred while fetching gifts' });
     }
 });
+
 
 // GET /api/:id - Retrieve a gift by custom ID field
 router.get('/:id', async (req, res) => {
